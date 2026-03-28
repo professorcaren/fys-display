@@ -329,8 +329,6 @@ function resolveCollision(a, b) {
   }
 
   // Flash both on collision
-  a.flashTimer = 0.4;
-  b.flashTimer = 0.4;
 }
 
 // Initial placement — try to avoid overlaps
@@ -375,19 +373,11 @@ function animate(now) {
     b.y += b.vy * dt;
 
     // Wall bouncing
-    if (b.x < PADDING) { b.x = PADDING; b.vx = Math.abs(b.vx); b.flashTimer = 0.2; }
-    if (b.x + b.w > sw - PADDING) { b.x = sw - PADDING - b.w; b.vx = -Math.abs(b.vx); b.flashTimer = 0.2; }
-    if (b.y < HEADER_H) { b.y = HEADER_H; b.vy = Math.abs(b.vy); b.flashTimer = 0.2; }
-    if (b.y + b.h > sh - PADDING) { b.y = sh - PADDING - b.h; b.vy = -Math.abs(b.vy); b.flashTimer = 0.2; }
+    if (b.x < PADDING) { b.x = PADDING; b.vx = Math.abs(b.vx); }
+    if (b.x + b.w > sw - PADDING) { b.x = sw - PADDING - b.w; b.vx = -Math.abs(b.vx); }
+    if (b.y < HEADER_H) { b.y = HEADER_H; b.vy = Math.abs(b.vy); }
+    if (b.y + b.h > sh - PADDING) { b.y = sh - PADDING - b.h; b.vy = -Math.abs(b.vy); }
 
-    // Flash decay
-    if (b.flashTimer > 0) {
-      b.flashTimer -= dt;
-      if (b.flashTimer <= 0) {
-        b.el.style.color = b.baseColor;
-        b.el.style.textShadow = 'none';
-      }
-    }
   }
 
   // Collision detection (O(n^2) is fine for ~30 items)
@@ -396,16 +386,6 @@ function animate(now) {
       if (overlaps(bodies[i], bodies[j])) {
         resolveCollision(bodies[i], bodies[j]);
       }
-    }
-  }
-
-  // Apply flash effect
-  for (const b of bodies) {
-    if (b.flashTimer > 0) {
-      // Brief bright glow on collision
-      const glow = b.baseColor === '#4B9CD3' ? '#99D6EA' : '#FFFFFF';
-      b.el.style.color = glow;
-      b.el.style.textShadow = `0 0 ${12 + b.flashTimer * 20}px ${b.baseColor}`;
     }
   }
 
