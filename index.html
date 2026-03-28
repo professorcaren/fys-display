@@ -224,7 +224,7 @@ const STYLES = [
 ];
 
 // Screen bounds
-const HEADER_H = 100; // keep titles below header
+const HEADER_H = Math.max(160, window.innerHeight * 0.18); // keep titles below header
 const PADDING = 10;
 
 function W() { return window.innerWidth; }
